@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "dgSpecHash": "fRw0lfuFY52aSnXsC26OmsFSZjxQ6INdNZtLKlpJBhpthF2oGeuwR6w/qj0LIL7Wj9wtHbWEXLDhlef0LEMybQ==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Grant.Kew\\Documents\\Personal\\MixTel\\VehiclePosition\\MixTelematix.Grant.VehiclePosition\\MixTelematix.Grant.VehiclePosition\\MixTelematix.Grant.Assesment.VehiclePosition.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Grant.Kew\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\6.0.13\\microsoft.windowsdesktop.app.ref.6.0.13.nupkg.sha512",
+    "C:\\Users\\Grant.Kew\\.nuget\\packages\\microsoft.netcore.app.ref\\6.0.13\\microsoft.netcore.app.ref.6.0.13.nupkg.sha512",
+    "C:\\Users\\Grant.Kew\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\6.0.13\\microsoft.aspnetcore.app.ref.6.0.13.nupkg.sha512",
+    "C:\\Users\\Grant.Kew\\.nuget\\packages\\microsoft.netcore.app.host.win-x64\\6.0.13\\microsoft.netcore.app.host.win-x64.6.0.13.nupkg.sha512"
+  ],
+  "logs": []
+}
