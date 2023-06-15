@@ -29,12 +29,69 @@ var coordinates = new List<GeoCoordinate> {
                 new GeoCoordinate(32.234235,-100.222222)
             };
 
-var nearestVehicles = new List<NearestVehicle>();
+double farthestDistance = 0;
+
+/*
+Attempt 1.2
+loop through coordinates and find farthest distance between coordinates
+filter data to only include data for vehicles within the range
+find closest vehicle.
+
+filter however only limits data to 1.89m rows, so I'm going to take swing in the dark and say this isn't what you wanted from me.
+I thought about looping through the table and collecting distances from there but the net result would still be 20m queries.
+My best guess is that it would have something to do with a closeness threshold or grouping the cars in some way. 
+Properly stumped...
+ */
+
+//get maximum distance between requested coordinates to filter list
+
+foreach (var primaryCoordinate in coordinates)
+{
+    foreach (var compareCoordinate in coordinates)
+    {
+        if (primaryCoordinate == compareCoordinate)
+        {
+            //don't compare the coordinate to its self
+            continue;
+        }
+
+        var distance = primaryCoordinate.GetDistanceTo(compareCoordinate);
+        farthestDistance = distance > farthestDistance ? distance : farthestDistance;
+    }
+}
+
+//find car closest to first point
+var primaryVehicle = vehicleDataList
+        .OrderBy(x => ((coordinates[0].Latitude - x.Latitude) * (coordinates[0].Latitude - x.Latitude)) +
+                          ((coordinates[0].Longitude - x.Longitude) * (coordinates[0].Longitude - x.Longitude)))
+        .First();
+
+//list cars within farthest distance
+var filteredList = new List<VehicleData>();
+
+while (!filteredList.Any())
+{
+    filteredList = vehicleDataList
+                    .Where(x => new GeoCoordinate(x.Latitude, x.Longitude)
+                    .GetDistanceTo(new GeoCoordinate(primaryVehicle.Latitude, primaryVehicle.Longitude)) <= farthestDistance)
+                    .ToList();
+    //increase the distance by 1% each iteration
+    farthestDistance = farthestDistance * 1.01;
+}
+
+var nearestVehicles = new List<NearestVehicle> {
+    new NearestVehicle {
+        Vehicle = primaryVehicle,
+        RequestedCoordinate = coordinates[0]
+    }
+};
+
+coordinates.Remove(coordinates[0]);
 
 stopwatch.Restart();
 foreach (var coordinate in coordinates)
 {
-    var nearestVehicle = vehicleDataList
+    var nearestVehicle = filteredList
         .OrderBy(x => ((coordinate.Latitude - x.Latitude) * (coordinate.Latitude - x.Latitude)) +
                           ((coordinate.Longitude - x.Longitude) * (coordinate.Longitude - x.Longitude)))
         .First();
@@ -50,3 +107,13 @@ foreach (var coordinate in coordinates)
 stopwatch.StopSopwatchAndLogTime("Completed vehicle location processing");
 nearestVehicles.ForEach(vehicle => vehicle.LogCompletedVehicleData());
 Console.ReadLine();
+
+/*
+ I'm fairly certain that this is not the solution that you are looking for and I realize that does not bode well for my prospects with you, 
+ however you have genuinely intrigued me with this and I would love to know what the desired outcome is. Should this be the last you hear from me, 
+ I would like you to know that this is one of few positions that I would be genuinely disappointed in not getting, purely for the growth potential that I can see at MixTel.
+ I had a look at the rest of the GitHub repo and I like the code that I saw. 
+
+ Something I found whilst looking for a solution to this magnificent problem that I thought might be of interest to you.
+    https://www.codeproject.com/Questions/5340076/Find-the-nearest-vehicle-position-in-Csharp-NET-co.
+ */
